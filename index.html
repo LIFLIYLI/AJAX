@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <button id="mybtn">点我</button>
+    <div id="list"></div>
+    <div id="ol"></div>
+    <script>
+        mybtn.addEventListener('click',(e)=>{
+            let request=new XMLHttpRequest()
+            request.open('get','http://rap2api.taobao.org/app/mock/117560/list')
+            request.send()
+            request.onreadystatechange = ()=>{
+                if(request.readyState===4){
+                    console.log('响应完成')
+                    if(request.status===200){
+                    request.getAllResponseHeaders()
+                    console.log('请求成功')
+                    let kk=request.responseText
+                    let obj=JSON.parse(kk)
+                    console.log(obj)
+                    console.log(typeof obj)
+                    for(var x in obj){ 
+                        console.log(obj[x])
+                        console.log(typeof obj[x]) 
+                        if(typeof obj[x]==='object'){
+                            obj[x].forEach((x)=>{
+                              let aa=document.createElement('div')
+                              aa.innerText='编号：'+x.price+'  '+'这是啥：'+x.title + '  '+'年龄：'+x.age
+                              ol.appendChild(aa)
+                            })
+                        }else if(typeof obj[x]==='number'){
+                            let cc=document.createElement('div')
+                            cc.innerText='我的CODE是：'+ obj[x]   
+                            list.appendChild(cc)
+                           
+                        }
+                            
+                   }
+                }else{
+                    console.log('未知错误')
+                }
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>
