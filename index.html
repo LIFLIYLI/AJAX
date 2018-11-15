@@ -13,7 +13,7 @@
     <script>
         mybtn.addEventListener('click',(e)=>{
             let request=new XMLHttpRequest()
-            request.open('get','https://rap2api.taobao.org/app/mock/117560/list')
+            request.open('get','http://rap2api.taobao.org/app/mock/117560/list')
             request.send()
             request.onreadystatechange = ()=>{
                 if(request.readyState===4){
