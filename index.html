@@ -12,8 +12,12 @@
     <div id="ol"></div>
     <script>
         mybtn.addEventListener('click',(e)=>{
+            ajax('http://rap2api.taobao.org/app/mock/117560/list',render)
+        })
+
+function  ajax(url,callback){
             let request=new XMLHttpRequest()
-            request.open('get','http://rap2api.taobao.org/app/mock/117560/list')
+            request.open('get',url)
             request.send()
             request.onreadystatechange = ()=>{
                 if(request.readyState===4){
@@ -21,33 +25,30 @@
                     if(request.status===200){
                     request.getAllResponseHeaders()
                     console.log('请求成功')
-                    let kk=request.responseText
-                    let obj=JSON.parse(kk)
-                    console.log(obj)
-                    console.log(typeof obj)
-                    for(var x in obj){ 
-                        console.log(obj[x])
-                        console.log(typeof obj[x]) 
-                        if(typeof obj[x]==='object'){
-                            obj[x].forEach((x)=>{
-                              let aa=document.createElement('div')
-                              aa.innerText='编号：'+x.price+'  '+'这是啥：'+x.title + '  '+'年龄：'+x.age
-                              ol.appendChild(aa)
-                            })
-                        }else if(typeof obj[x]==='number'){
-                            let cc=document.createElement('div')
-                            cc.innerText='我的CODE是：'+ obj[x]   
-                            list.appendChild(cc)
-                           
-                        }
-                            
-                   }
+                    let response=request.responseText
+                    let responses=JSON.parse(response)
+                    callback(responses,request)
                 }else{
                     console.log('未知错误')
                 }
                 }
             }
-        })
+}
+function render(qqq,doo){
+    if(doo.status>500){
+        ajax('http://rap2api.taobao.org/app/mock/117560/list',render) 
+    }else{
+        let data=qqq.data
+        let code=qqq.code
+        if(!code)return
+        const context = document.querySelector('#ol')
+        data.forEach(element=>{
+            let node =document.createElement('div')
+            node.innerHTML=`价格:${element.price} 名字:${element.title} 年级${element.age}`
+            context.appendChild(node)
+        })    
+    }                                   
+}
 
     </script>
 </body>
